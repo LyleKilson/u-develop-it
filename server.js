@@ -4,22 +4,26 @@ const express = require("express");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// Expresss middleware
-app.use(express.urlencoded({ extend: false }));
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Connect to database
 const db = mysql.createConnection(
   {
     host: "localhost",
-    // Your My SQL username,
+    // Your MySQL username,
     user: "root",
     // Your MySQL password
     password: "Winnipeg2012!",
     database: "election",
   },
-  console.log("Connected to the election database")
+  console.log("Connected to the election database.")
 );
+
+db.query(`SELECT * FROM candidates`, (err, rows) => {
+  console.log(rows);
+});
 
 app.get("/", (req, res) => {
   res.json({
@@ -27,7 +31,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Default response for any other request (NOT FOUND)
+// Default response for any other request (Not Found)
 app.use((req, res) => {
   res.status(404).end();
 });
