@@ -1,5 +1,5 @@
-const mysql = require("mysql2");
 const express = require("express");
+const mysql = require("mysql2");
 const inputCheck = require("./utils/inputCheck");
 
 const PORT = process.env.PORT || 3001;
@@ -16,7 +16,7 @@ const db = mysql.createConnection(
     // Your MySQL username,
     user: "root",
     // Your MySQL password
-    password: "Winnipeg2012!",
+    password: "",
     database: "election",
   },
   console.log("Connected to the election database.")
@@ -87,13 +87,14 @@ app.post("/api/candidate", ({ body }, res) => {
   );
   if (errors) {
     res.status(400).json({ error: errors });
+    return;
   }
+
   const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
     VALUES (?,?,?)`;
   const params = [body.first_name, body.last_name, body.industry_connected];
 
   db.query(sql, params, (err, result) => {
-
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -102,12 +103,6 @@ app.post("/api/candidate", ({ body }, res) => {
       message: "success",
       data: body,
     });
-  });
-});
-
-app.get("/", (req, res) => {
-  res.json({
-    message: "Hello World",
   });
 });
 
